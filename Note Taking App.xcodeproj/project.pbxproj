@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A93F3574174D682F00F299A2 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F3573174D682F00F299A2 /* View.xib */; };
+		A93F3577174D688B00F299A2 /* TDLinkToDropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */; };
+		A9579E4A174C7E7D0045FB5D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */; };
 		A9D2167B174C6E8B000984FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167A174C6E8B000984FD /* UIKit.framework */; };
 		A9D2167D174C6E8B000984FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167C174C6E8B000984FD /* Foundation.framework */; };
 		A9D2167F174C6E8B000984FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167E174C6E8B000984FD /* CoreGraphics.framework */; };
@@ -26,6 +29,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A93F3573174D682F00F299A2 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = View.xib; path = Views/View.xib; sourceTree = "<group>"; };
+		A93F3575174D688B00F299A2 /* TDLinkToDropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TDLinkToDropboxView.h; path = Views/TDLinkToDropboxView.h; sourceTree = "<group>"; };
+		A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TDLinkToDropboxView.m; path = Views/TDLinkToDropboxView.m; sourceTree = "<group>"; };
+		A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A9D21677174C6E8B000984FD /* Note Taking App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Note Taking App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D2167A174C6E8B000984FD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A9D2167C174C6E8B000984FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -54,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9579E4A174C7E7D0045FB5D /* libsqlite3.dylib in Frameworks */,
 				A9D216A6174C703F000984FD /* QuartzCore.framework in Frameworks */,
 				A9D216A4174C7038000984FD /* SystemConfiguration.framework in Frameworks */,
 				A9D216A2174C702C000984FD /* Security.framework in Frameworks */,
@@ -68,6 +76,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A93F3572174D67FA00F299A2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A93F3573174D682F00F299A2 /* View.xib */,
+				A93F3575174D688B00F299A2 /* TDLinkToDropboxView.h */,
+				A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		A9D2166E174C6E8B000984FD = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +106,7 @@
 		A9D21679174C6E8B000984FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */,
 				A9D216A5174C703F000984FD /* QuartzCore.framework */,
 				A9D216A3174C7038000984FD /* SystemConfiguration.framework */,
 				A9D216A1174C702C000984FD /* Security.framework */,
@@ -105,6 +124,7 @@
 			children = (
 				A9D21692174C6E8B000984FD /* MainStoryboard.storyboard */,
 				A9D216A7174C711E000984FD /* ViewControllers */,
+				A93F3572174D67FA00F299A2 /* Views */,
 				A9D21681174C6E8B000984FD /* Supporting Files */,
 			);
 			path = "Note Taking App";
@@ -192,6 +212,7 @@
 				A9D2168F174C6E8B000984FD /* Default@2x.png in Resources */,
 				A9D21691174C6E8B000984FD /* Default-568h@2x.png in Resources */,
 				A9D21694174C6E8B000984FD /* MainStoryboard.storyboard in Resources */,
+				A93F3574174D682F00F299A2 /* View.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +226,7 @@
 				A9D21687174C6E8B000984FD /* main.m in Sources */,
 				A9D2168B174C6E8B000984FD /* TDAppDelegate.m in Sources */,
 				A9D21697174C6E8B000984FD /* TDViewController.m in Sources */,
+				A93F3577174D688B00F299A2 /* TDLinkToDropboxView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +357,7 @@
 				A9D2169C174C6E8B000984FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
