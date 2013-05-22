@@ -6,13 +6,17 @@
 //  Copyright (c) 2013 Alex Silva. All rights reserved.
 //
 
+#import <Dropbox/Dropbox.h>
 #import "TDAppDelegate.h"
 
 @implementation TDAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    DBAccountManager* accountMgr =
+    [[DBAccountManager alloc] initWithAppKey:@"zctew5soe5c5i5l" secret:@"1lzbm8dspetca18"];
+    [DBAccountManager setSharedManager:accountMgr];
+    
     return YES;
 }
 							

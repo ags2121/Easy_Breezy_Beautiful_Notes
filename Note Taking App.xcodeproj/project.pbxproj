@@ -18,6 +18,11 @@
 		A9D21691174C6E8B000984FD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D21690174C6E8B000984FD /* Default-568h@2x.png */; };
 		A9D21694174C6E8B000984FD /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D21692174C6E8B000984FD /* MainStoryboard.storyboard */; };
 		A9D21697174C6E8B000984FD /* TDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D21696174C6E8B000984FD /* TDViewController.m */; };
+		A9D2169E174C6FFD000984FD /* dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2169D174C6FFD000984FD /* dropbox.framework */; };
+		A9D216A0174C7022000984FD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2169F174C7022000984FD /* CFNetwork.framework */; };
+		A9D216A2174C702C000984FD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D216A1174C702C000984FD /* Security.framework */; };
+		A9D216A4174C7038000984FD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D216A3174C7038000984FD /* SystemConfiguration.framework */; };
+		A9D216A6174C703F000984FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D216A5174C703F000984FD /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +42,11 @@
 		A9D21693174C6E8B000984FD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		A9D21695174C6E8B000984FD /* TDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDViewController.h; sourceTree = "<group>"; };
 		A9D21696174C6E8B000984FD /* TDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDViewController.m; sourceTree = "<group>"; };
+		A9D2169D174C6FFD000984FD /* dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = dropbox.framework; sourceTree = "<group>"; };
+		A9D2169F174C7022000984FD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		A9D216A1174C702C000984FD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A9D216A3174C7038000984FD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A9D216A5174C703F000984FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,9 +54,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9D216A6174C703F000984FD /* QuartzCore.framework in Frameworks */,
+				A9D216A4174C7038000984FD /* SystemConfiguration.framework in Frameworks */,
+				A9D216A2174C702C000984FD /* Security.framework in Frameworks */,
+				A9D216A0174C7022000984FD /* CFNetwork.framework in Frameworks */,
 				A9D2167B174C6E8B000984FD /* UIKit.framework in Frameworks */,
 				A9D2167D174C6E8B000984FD /* Foundation.framework in Frameworks */,
 				A9D2167F174C6E8B000984FD /* CoreGraphics.framework in Frameworks */,
+				A9D2169E174C6FFD000984FD /* dropbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +88,11 @@
 		A9D21679174C6E8B000984FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9D216A5174C703F000984FD /* QuartzCore.framework */,
+				A9D216A3174C7038000984FD /* SystemConfiguration.framework */,
+				A9D216A1174C702C000984FD /* Security.framework */,
+				A9D2169F174C7022000984FD /* CFNetwork.framework */,
+				A9D2169D174C6FFD000984FD /* dropbox.framework */,
 				A9D2167A174C6E8B000984FD /* UIKit.framework */,
 				A9D2167C174C6E8B000984FD /* Foundation.framework */,
 				A9D2167E174C6E8B000984FD /* CoreGraphics.framework */,
@@ -83,11 +103,8 @@
 		A9D21680174C6E8B000984FD /* Note Taking App */ = {
 			isa = PBXGroup;
 			children = (
-				A9D21689174C6E8B000984FD /* TDAppDelegate.h */,
-				A9D2168A174C6E8B000984FD /* TDAppDelegate.m */,
 				A9D21692174C6E8B000984FD /* MainStoryboard.storyboard */,
-				A9D21695174C6E8B000984FD /* TDViewController.h */,
-				A9D21696174C6E8B000984FD /* TDViewController.m */,
+				A9D216A7174C711E000984FD /* ViewControllers */,
 				A9D21681174C6E8B000984FD /* Supporting Files */,
 			);
 			path = "Note Taking App";
@@ -96,6 +113,8 @@
 		A9D21681174C6E8B000984FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A9D21689174C6E8B000984FD /* TDAppDelegate.h */,
+				A9D2168A174C6E8B000984FD /* TDAppDelegate.m */,
 				A9D21682174C6E8B000984FD /* Note Taking App-Info.plist */,
 				A9D21683174C6E8B000984FD /* InfoPlist.strings */,
 				A9D21686174C6E8B000984FD /* main.m */,
@@ -105,6 +124,15 @@
 				A9D21690174C6E8B000984FD /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A9D216A7174C711E000984FD /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A9D21695174C6E8B000984FD /* TDViewController.h */,
+				A9D21696174C6E8B000984FD /* TDViewController.m */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +289,10 @@
 		A9D2169B174C6E8B000984FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Note Taking App/Note Taking App-Prefix.pch";
 				INFOPLIST_FILE = "Note Taking App/Note Taking App-Info.plist";
@@ -272,6 +304,10 @@
 		A9D2169C174C6E8B000984FD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Note Taking App/Note Taking App-Prefix.pch";
 				INFOPLIST_FILE = "Note Taking App/Note Taking App-Info.plist";
