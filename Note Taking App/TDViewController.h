@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "TDLinkToDropboxView.h"
+#import "TDNoteListControllerViewController.h"
 
-@interface TDViewController : UIViewController<LinkToDropBoxViewDelegate>
+@interface TDViewController : UIViewController<LinkToDropBoxViewDelegate, NoteListDelegate, UITextViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITextView *notesTextview;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *updateButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+- (IBAction)updateButtonPressed:(id)sender;
+- (IBAction)listOfNotesBtnPressed:(id)sender;
 
 @end

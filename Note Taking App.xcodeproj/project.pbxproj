@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A93F3574174D682F00F299A2 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F3573174D682F00F299A2 /* View.xib */; };
 		A93F3577174D688B00F299A2 /* TDLinkToDropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */; };
+		A93F357A174D84F800F299A2 /* TDNoteListControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F3579174D84F800F299A2 /* TDNoteListControllerViewController.m */; };
+		A93F357C174D9C4800F299A2 /* TDLinkToDropboxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F357B174D9C4800F299A2 /* TDLinkToDropboxView.xib */; };
 		A9579E4A174C7E7D0045FB5D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */; };
 		A9D2167B174C6E8B000984FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167A174C6E8B000984FD /* UIKit.framework */; };
 		A9D2167D174C6E8B000984FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167C174C6E8B000984FD /* Foundation.framework */; };
@@ -29,9 +30,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A93F3573174D682F00F299A2 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = View.xib; path = Views/View.xib; sourceTree = "<group>"; };
 		A93F3575174D688B00F299A2 /* TDLinkToDropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TDLinkToDropboxView.h; path = Views/TDLinkToDropboxView.h; sourceTree = "<group>"; };
 		A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TDLinkToDropboxView.m; path = Views/TDLinkToDropboxView.m; sourceTree = "<group>"; };
+		A93F3578174D84F800F299A2 /* TDNoteListControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDNoteListControllerViewController.h; sourceTree = "<group>"; };
+		A93F3579174D84F800F299A2 /* TDNoteListControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDNoteListControllerViewController.m; sourceTree = "<group>"; };
+		A93F357B174D9C4800F299A2 /* TDLinkToDropboxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TDLinkToDropboxView.xib; sourceTree = "<group>"; };
 		A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A9D21677174C6E8B000984FD /* Note Taking App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Note Taking App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D2167A174C6E8B000984FD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -79,7 +82,7 @@
 		A93F3572174D67FA00F299A2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A93F3573174D682F00F299A2 /* View.xib */,
+				A93F357B174D9C4800F299A2 /* TDLinkToDropboxView.xib */,
 				A93F3575174D688B00F299A2 /* TDLinkToDropboxView.h */,
 				A93F3576174D688B00F299A2 /* TDLinkToDropboxView.m */,
 			);
@@ -151,6 +154,8 @@
 			children = (
 				A9D21695174C6E8B000984FD /* TDViewController.h */,
 				A9D21696174C6E8B000984FD /* TDViewController.m */,
+				A93F3578174D84F800F299A2 /* TDNoteListControllerViewController.h */,
+				A93F3579174D84F800F299A2 /* TDNoteListControllerViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 				A9D21673174C6E8B000984FD /* Sources */,
 				A9D21674174C6E8B000984FD /* Frameworks */,
 				A9D21675174C6E8B000984FD /* Resources */,
+				A93F357D174DA25200F299A2 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -212,11 +218,27 @@
 				A9D2168F174C6E8B000984FD /* Default@2x.png in Resources */,
 				A9D21691174C6E8B000984FD /* Default-568h@2x.png in Resources */,
 				A9D21694174C6E8B000984FD /* MainStoryboard.storyboard in Resources */,
-				A93F3574174D682F00F299A2 /* View.xib in Resources */,
+				A93F357C174D9C4800F299A2 /* TDLinkToDropboxView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A93F357D174DA25200F299A2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A9D21673174C6E8B000984FD /* Sources */ = {
@@ -227,6 +249,7 @@
 				A9D2168B174C6E8B000984FD /* TDAppDelegate.m in Sources */,
 				A9D21697174C6E8B000984FD /* TDViewController.m in Sources */,
 				A93F3577174D688B00F299A2 /* TDLinkToDropboxView.m in Sources */,
+				A93F357A174D84F800F299A2 /* TDNoteListControllerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
