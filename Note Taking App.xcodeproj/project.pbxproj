@@ -14,6 +14,7 @@
 		A9CABB30174F0BA500A44E20 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB2E174F08F800A44E20 /* UIImage+Resize.m */; };
 		A9CABB33174F0BB600A44E20 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB32174F0BB600A44E20 /* UIImage+RoundedCorner.m */; };
 		A9CABB36174F0BC500A44E20 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB35174F0BC500A44E20 /* UIImage+Alpha.m */; };
+		A9CABB38174FE6D000A44E20 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9CABB37174FE6D000A44E20 /* EventKit.framework */; };
 		A9D2167B174C6E8B000984FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167A174C6E8B000984FD /* UIKit.framework */; };
 		A9D2167D174C6E8B000984FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167C174C6E8B000984FD /* Foundation.framework */; };
 		A9D2167F174C6E8B000984FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167E174C6E8B000984FD /* CoreGraphics.framework */; };
@@ -45,6 +46,7 @@
 		A9CABB32174F0BB600A44E20 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		A9CABB34174F0BC500A44E20 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		A9CABB35174F0BC500A44E20 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		A9CABB37174FE6D000A44E20 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		A9D21677174C6E8B000984FD /* Note Taking App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Note Taking App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D2167A174C6E8B000984FD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A9D2167C174C6E8B000984FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9CABB38174FE6D000A44E20 /* EventKit.framework in Frameworks */,
 				A9579E4A174C7E7D0045FB5D /* libsqlite3.dylib in Frameworks */,
 				A9D216A6174C703F000984FD /* QuartzCore.framework in Frameworks */,
 				A9D216A4174C7038000984FD /* SystemConfiguration.framework in Frameworks */,
@@ -118,6 +121,7 @@
 		A9D21679174C6E8B000984FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9CABB37174FE6D000A44E20 /* EventKit.framework */,
 				A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */,
 				A9D216A5174C703F000984FD /* QuartzCore.framework */,
 				A9D216A3174C7038000984FD /* SystemConfiguration.framework */,

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Alex Silva. All rights reserved.
 //
 
+#import <EventKit/EventKit.h>
+#import "TDAppDelegate.h"
 #import "UIImage+Resize.h"
 #import "TDViewController.h"
 #import "TDNoteListControllerViewController.h"
@@ -18,6 +20,7 @@
 @property (nonatomic, strong) DBFilesystem *fileSystem;
 @property (nonatomic, strong) DBFile *theFileBeingViewed;
 @property (nonatomic, assign) BOOL textViewLoaded;
+@property (nonatomic, assign) BOOL didTakePhoto;
 @property (nonatomic, retain) NSTimer *writeTimer;
 
 @end
@@ -40,7 +43,8 @@
     [self openFirstNoteIfThereIsOne];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
     DBFileInfo *info = [self.fileSystem fileInfoForPath:self.theFileBeingViewed.info.path error:nil];
@@ -282,6 +286,7 @@
     self.photoImageView.image = croppedImage;
     
     [self addObserverToFile];
+    self.didTakePhoto = YES;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -351,9 +356,14 @@
 }
 
 - (void)saveChanges {
-//	if (!_writeTimer) return;
-//	[_writeTimer invalidate];
-//	self.writeTimer = nil;
+	if (!_writeTimer && !_didTakePhoto) return;
+	[_writeTimer invalidate];
+	self.writeTimer = nil;
+    
+    
+    //create event if necessary
+    if(self.notesTextview.text.length > 6)
+        [self parseNoteAndAddEvent:self.notesTextview.text];
     
 	if( self.photoImageView.image ){
         UIImage *composite = [self imageByCombiningImageViewWithTextView];
@@ -431,6 +441,147 @@
             return @"image/tiff";
     }
     return nil;
+}
+
+-(void)parseNoteAndAddEvent:(NSString*)text
+{
+    //trim whitespace at beginning
+    NSString *noWhiteSpace = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    //isolate "TODO" portion
+    NSString *trimmedText = [noWhiteSpace substringToIndex:5];
+    if( [trimmedText caseInsensitiveCompare:@"TODO:"] == NSOrderedSame ){
+        
+        //get and trim reminder text
+        NSString *reminderText = [[noWhiteSpace substringFromIndex:5] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        [self checkForDuplicateReminderAndAdd:reminderText];
+    }
+}
+
+-(void)addEventToReminders:(NSString*)eventName
+{
+
+    // save to iphone calendar
+    
+    EKEventStore *eventStore = [[TDAppDelegate sharedDelegate] eventStore];
+    
+    if([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+    {
+        // iOS 6 and later
+        // This line asks user's permission to access his calendar
+        [eventStore requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error)
+         {
+             if (granted) // user user is ok with it
+             {
+    
+                 EKReminder *reminder = [EKReminder reminderWithEventStore:eventStore];
+                 
+                 
+                 unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+                 NSCalendar * cal = [NSCalendar currentCalendar];
+                 NSDateComponents *tomorrow = [cal components:unitFlags fromDate:[NSDate date]];
+                 [tomorrow setDay: tomorrow.day+1];
+                 
+                 reminder.title  = eventName;
+                 NSDateComponents *start = reminder.startDateComponents;
+                 start.timeZone = [NSTimeZone systemTimeZone];
+                 reminder.startDateComponents = start;
+                 reminder.dueDateComponents = tomorrow;
+                 
+                 [reminder setCalendar:[eventStore defaultCalendarForNewReminders]];
+                 
+                 NSError *err;
+                 
+                 [eventStore saveReminder:reminder commit:YES error:&err];
+                 
+                 if(err)
+                     [self showErrorAlert:@"Unable to save reminder!" text: [NSString stringWithFormat:@"Error= %@", err]];
+                 
+             }
+             else // if he does not allow
+             {
+                 [[[UIAlertView alloc]initWithTitle:nil message:@"®¥†¥´¥®†ˆ" delegate:nil cancelButtonTitle:NSLocalizedString(@"plzAlowCalendar", nil)  otherButtonTitles: nil] show];
+                 return;
+             }
+         }];
+    }
+
+    // iOS < 6
+    else
+    {
+        EKReminder *reminder = [EKReminder reminderWithEventStore:eventStore];
+        
+        NSDateComponents *tmrwComponent = [[NSDateComponents alloc] init];
+        [tmrwComponent setDay:+1];
+        
+        reminder.title  = eventName;
+        NSDateComponents *start = reminder.startDateComponents;
+        start.timeZone = [NSTimeZone systemTimeZone];
+        reminder.startDateComponents = start;
+        reminder.dueDateComponents = tmrwComponent;
+        
+        [reminder setCalendar:[eventStore defaultCalendarForNewReminders]];
+        
+        NSError *err;
+        
+        [eventStore saveReminder:reminder commit:YES error:&err];
+        
+        if(err)
+            [self showErrorAlert:@"Unable to save reminder!" text: [NSString stringWithFormat:@"Error= %@", err]];
+    }
+}
+
+//checks if a reminder of the same name, with a due date between today and tmrw, has already been set
+-(void)checkForDuplicateReminderAndAdd:(NSString*)eventName
+{
+    EKEventStore *eventStore = [[TDAppDelegate sharedDelegate] eventStore];
+    
+    //create alternate begin date, if you want a different range
+    /*
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    [comps setDay:1];
+    [comps setMonth:1];
+    [comps setYear:2010];
+    NSCalendar *gregorian = [[NSCalendar alloc]
+                             initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDate *startDate = [gregorian dateFromComponents:comps];
+     */
+    
+    //get date for tmrw
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dayComponent = [NSDateComponents new];
+    dayComponent.day = 1;
+    NSDate *tmrw = [calendar dateByAddingComponents:dayComponent toDate:[NSDate date] options:0];
+    
+    //range is from today to tomorrow
+    NSPredicate *predicateForEventsLast24Hours = [eventStore predicateForIncompleteRemindersWithDueDateStarting:[NSDate date] ending:tmrw calendars:nil];
+    
+    [eventStore fetchRemindersMatchingPredicate:predicateForEventsLast24Hours completion:^(NSArray *eventsInRange) {
+        
+        BOOL eventExists = NO;
+        
+        NSLog(@"reminders: %@", eventsInRange);
+        
+        for (EKEvent *eventToCheck in eventsInRange) {
+            if ( [eventToCheck.title caseInsensitiveCompare:eventName] == NSOrderedSame ) {
+                eventExists = YES;
+            }
+        }
+        
+        if (eventExists) {
+            NSLog(@"reminder already exists!");
+        }
+        else{
+            [self addEventToReminders:eventName];
+        }
+    }];
+}
+
+- (BOOL)text:(NSString*)text containsString:(NSString *)string
+               options:(NSStringCompareOptions)options {
+    NSRange rng = [text rangeOfString:string options:options];
+    return rng.location != NSNotFound;
 }
 
 @end

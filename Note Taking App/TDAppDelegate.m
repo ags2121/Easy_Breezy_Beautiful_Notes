@@ -11,11 +11,17 @@
 
 @implementation TDAppDelegate
 
++ (TDAppDelegate *)sharedDelegate {
+	return (TDAppDelegate *)[UIApplication sharedApplication].delegate;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     DBAccountManager* accountMgr =
     [[DBAccountManager alloc] initWithAppKey:@"zctew5soe5c5i5l" secret:@"1lzbm8dspetca18"];
     [DBAccountManager setSharedManager:accountMgr];
+    
+    self.eventStore = [[EKEventStore alloc] init];
     
     return YES;
 }
