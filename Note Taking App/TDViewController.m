@@ -381,6 +381,15 @@
         [self reload];
 }
 
+-(NSString*)createFileNameFromDate:(NSDate*)date
+{
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"dd-MM-yyyy"];
+    NSString *theDate = [format stringFromDate:[NSDate date]];
+    NSString *noteFilename = [NSString stringWithFormat:@"%@.txt", theDate];
+    return noteFilename;
+}
+
 - (void)openFirstNoteIfThereIsOne
 {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^() {
@@ -390,7 +399,10 @@
             return [[obj2 path] compare:[obj1 path]];
         }];
 		dispatch_async(dispatch_get_main_queue(), ^() {
-			if (self.theFileBeingViewed == nil && mContents.count > 0) {
+//			if (self.theFileBeingViewed == nil && mContents.count > 0) {
+            if ( mContents.count > 0 &&
+                [ [self createFileNameFromDate:[NSDate date]] isEqualToString: [[(DBFileInfo*)mContents[0] path ]name] ] ) {
+                
                 DBFileInfo *firstNote = mContents[0];
                 DBFile *file = [self.fileSystem openFile:firstNote.path error:nil];
                 if (file) {
@@ -403,6 +415,9 @@
 		});
 	});
 }
+
+
+#pragma mark - Image compositing methods
 
 - (UIImage*)imageByCombiningImageViewWithTextView
 {
@@ -442,6 +457,9 @@
     }
     return nil;
 }
+
+
+#pragma mark - Reminder parsing methods
 
 -(void)parseNoteAndAddEvent:(NSString*)text
 {
@@ -583,5 +601,7 @@
     NSRange rng = [text rangeOfString:string options:options];
     return rng.location != NSNotFound;
 }
+
+
 
 @end
