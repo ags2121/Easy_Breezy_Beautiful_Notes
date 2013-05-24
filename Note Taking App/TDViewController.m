@@ -49,10 +49,10 @@
     }
 
 
-    if ([self.theFileBeingViewed observationInfo] == nil){
-        __weak TDViewController *weakSelf = self;
-        [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
-    }
+//    if ([self.theFileBeingViewed observationInfo] == nil){
+//        __weak TDViewController *weakSelf = self;
+//        [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
+//    }
     
     if (!self.textViewLoaded) {
         [self reload];
@@ -62,7 +62,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
-    if ([self.theFileBeingViewed observationInfo] != nil)
+    if ( self.theFileBeingViewed != nil )
         [self.theFileBeingViewed removeObserver:self];
 	[self saveChanges];
 }
@@ -71,6 +71,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addObserverToFile
+{
+    __weak TDViewController *weakSelf = self;
+    [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -156,20 +162,33 @@
         [self showErrorAlert:@"An error has occurred" text: @"Unable to create note"];
     }
     else{
-        self.navigationItem.title = [self.theFileBeingViewed.info.path.stringValue substringFromIndex:1];
+        self.navigationItem.title = self.theFileBeingViewed.info.path.name;
+        [self addObserverToFile];
     }
 }
 
--(void)noteListResigned:(TDNoteListControllerViewController *)noteList withFile:(DBFile *)file
+-(void)noteListResigned:(TDNoteListControllerViewController *)noteList withFile:(DBFile *)file createdNewFile:(BOOL)createdNewFile
 {
-    if(file){
-        self.theFileBeingViewed = file;
+    if(file && !createdNewFile){
         
-        self.navigationItem.title = [file.info.path.stringValue substringFromIndex:1];
+        self.theFileBeingViewed = file;
+        [self addObserverToFile];
+        self.navigationItem.title = file.info.path.name;
         self.notesTextview.text = [self.theFileBeingViewed readString:nil];
         [self reload];
     }
-                                     
+    else if(createdNewFile){
+        self.theFileBeingViewed = nil;
+        [self createAt];
+        [self addObserverToFile];
+        self.navigationItem.title = self.theFileBeingViewed.info.path.name;
+        self.notesTextview.text = @"";
+    }
+    
+    else if (self.theFileBeingViewed != nil) {
+        [self addObserverToFile];
+    }
+    
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -244,7 +263,7 @@
 			_textViewLoaded = YES;
 			NSString *contents = [self.theFileBeingViewed readString:nil];
             
-            self.navigationItem.title = [self.theFileBeingViewed.info.path.stringValue substringFromIndex:1];
+            self.navigationItem.title = self.theFileBeingViewed.info.path.name;
 			self.notesTextview.text = contents;
             NSLog(@"textview text: %@", self.notesTextview.text);
 		}
@@ -288,10 +307,11 @@
                 DBFile *file = [self.fileSystem openFile:firstNote.path error:nil];
                 if (file) {
                     self.theFileBeingViewed = file;
+                    [self addObserverToFile];
                     [self reload];
                 }
-                [self.activityIndicator stopAnimating];
             }
+            [self.activityIndicator stopAnimating];
 		});
 	});
 }

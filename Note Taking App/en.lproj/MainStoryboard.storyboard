@@ -118,6 +118,11 @@
                                 <action selector="cancelBtnPressed:" destination="pj5-nG-nHe" id="zq8-bE-zr9"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="RYi-O4-F6Q">
+                            <connections>
+                                <action selector="addNoteButtonPressed:" destination="pj5-nG-nHe" id="b7r-hu-qbD"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OT-W7-Tll" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -125,28 +130,6 @@
             <point key="canvasLocation" x="968" y="12"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TDNoteListControllerViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDNoteListControllerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="addNoteButtonPressed:"/>
-                <relationship kind="action" name="cancelBtnPressed:"/>
-            </relationships>
-        </class>
-        <class className="TDViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TDViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="listOfNotesBtnPressed:"/>
-                <relationship kind="action" name="updateButtonPressed:"/>
-                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="notesTextview" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="updateButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

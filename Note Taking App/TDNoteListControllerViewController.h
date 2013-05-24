@@ -13,7 +13,9 @@
 
 @protocol NoteListDelegate
 
--(void)noteListResigned:(TDNoteListControllerViewController*)noteList withFile:(DBFile*)file;
+-(void)noteListResigned:(TDNoteListControllerViewController*)noteList
+               withFile:(DBFile*)file
+        createdNewFile:(BOOL)createdNewFile;
 
 @end
 

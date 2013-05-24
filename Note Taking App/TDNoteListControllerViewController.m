@@ -79,11 +79,35 @@
 }
 
 #pragma mark - IB Actions
+- (IBAction)addNoteButtonPressed:(id)sender
+{
+    // if there are no saved notes in the directory OR if the date of the most recent file is NOT the same
+    // as todays date, then we'll allow the user to create a new file
+    if (self.contents.count == 0 ||
+        ![ [(DBFileInfo*)self.contents[0] path].name isEqualToString: [self todaysFormattedDate] ] ) {
+        
+        [self.delegate noteListResigned:self withFile:nil createdNewFile:YES];
+
+    }
+    else{
+        [self showErrorAlert:@"You already have a note created for today." text: @"Please add notes to an existing day."];
+    }
+}
 
 - (IBAction)cancelBtnPressed:(id)sender
 {
-    [self.delegate noteListResigned:self withFile:nil];
+    [self.delegate noteListResigned:self withFile:nil createdNewFile:NO];
 }
+
+//- (DBFile*)createAt
+//{
+//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//    [format setDateFormat:@"dd-MM-yyyy"];
+//    NSString *theDate = [format stringFromDate:[NSDate date]];
+//    NSString *noteFilename = [NSString stringWithFormat:@"%@.txt", theDate];
+//    DBPath *path = [[DBPath root] childPath:noteFilename];
+//    return [self.filesystem createFile:path error:nil];
+//}
 
 #pragma mark - Table view data source
 
@@ -120,8 +144,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 	} else {
 		[self showErrorAlert:@"Error" text: @"There was an error deleting that file."];
-		[self reload];
 	}
+    [self reload];
 }
 
 
@@ -138,7 +162,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         NSLog(@"error: %@", error.userInfo[@"desc"]);
         
         if ([self string:error.userInfo[@"desc"] contains:@"open"])
-            [self.delegate noteListResigned:self withFile:nil];
+            [self.delegate noteListResigned:self withFile:nil createdNewFile:NO];
         else{
 
             [self showErrorAlert:@"Error" text:@"There was an error opening your note"];
@@ -146,7 +170,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         }
     }
     else{
-        [self.delegate noteListResigned:self withFile:file];
+        [self.delegate noteListResigned:self withFile:file createdNewFile:NO];
     }
     
     
@@ -193,5 +217,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 {
     NSRange isRange = [string rangeOfString:otherString options:NSCaseInsensitiveSearch];
     return isRange.location != NSNotFound;
+}
+    
+-(NSString*)todaysFormattedDate
+{
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"dd-MM-yyyy"];
+    NSString *theDate = [format stringFromDate:[NSDate date]];
+    return [NSString stringWithFormat:@"%@.txt", theDate];
 }
 @end
