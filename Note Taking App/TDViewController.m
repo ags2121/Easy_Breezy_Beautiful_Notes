@@ -70,14 +70,65 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
--(void)addObserverToFile
+
+#pragma mark - viewDidLoad methods
+
+-(void)setInputAccessoryView
 {
-    __weak TDViewController *weakSelf = self;
-    [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
+    UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
+    keyboardToolbar.tintColor = [UIColor darkGrayColor];
+    
+    UIBarButtonItem* photoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto)];
+    
+    UIBarButtonItem* flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(saveNote)];
+    
+    [keyboardToolbar setItems:[NSArray arrayWithObjects: photoBtn, flexSpace, doneButton, nil] animated:NO];
+    
+    [self.notesTextview setInputAccessoryView:keyboardToolbar];
 }
+
+-(void)setFileSystem
+{
+    if(!self.fileSystem){
+        DBAccount *account = [[DBAccountManager sharedManager].linkedAccounts objectAtIndex:0];
+        self.fileSystem = [[DBFilesystem alloc] initWithAccount:account];
+    }
+}
+
+//opens up a saved note if there is a note that has been created today
+//otherwise, a blank note will open
+- (void)openFirstNoteIfThereIsOne
+{
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^() {
+		NSArray *immContents = [self.fileSystem listFolder: [DBPath root] error:nil];
+		NSMutableArray *mContents = [NSMutableArray arrayWithArray:immContents];
+        [mContents sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj2 path] compare:[obj1 path]];
+        }];
+		dispatch_async(dispatch_get_main_queue(), ^() {
+            //			if (self.theFileBeingViewed == nil && mContents.count > 0) {
+            if ( mContents.count > 0 &&
+                [ [self createFileNameFromDate:[NSDate date]] isEqualToString: [[(DBFileInfo*)mContents[0] path ]name] ] ) {
+                
+                DBFileInfo *firstNote = mContents[0];
+                DBFile *file = [self.fileSystem openFile:firstNote.path error:nil];
+                if (file) {
+                    self.theFileBeingViewed = file;
+                    [self addObserverToFile];
+                    [self reload];
+                }
+            }
+            [self.activityIndicator stopAnimating];
+		});
+	});
+}
+
+
+#pragma mark - Segue 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -90,6 +141,9 @@
     [nlvc setFilesystem:self.fileSystem withRoot:[DBPath root]];
     
 }
+
+
+#pragma mark - IBActions
 
 - (IBAction)updateButtonPressed:(id)sender
 {
@@ -175,6 +229,8 @@
     }
 }
 
+#pragma mark - NoteListDelegate methods
+
 -(void)noteListResigned:(TDNoteListControllerViewController *)noteList withFile:(DBFile *)file createdNewFile:(BOOL)createdNewFile
 {
     if(file && !createdNewFile){
@@ -214,21 +270,6 @@
     }
 }
 
--(void)setInputAccessoryView
-{
-    UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
-    keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-    keyboardToolbar.tintColor = [UIColor darkGrayColor];
-    
-    UIBarButtonItem* photoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto)];
-
-    UIBarButtonItem* flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(saveNote)];
-    
-    [keyboardToolbar setItems:[NSArray arrayWithObjects: photoBtn, flexSpace, doneButton, nil] animated:NO];
-    
-    [self.notesTextview setInputAccessoryView:keyboardToolbar];
-}
 
 #pragma mark - Accessory View Button Selectors
 
@@ -248,7 +289,6 @@
 
 -(void)takePhoto
 {
-
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
 #if TARGET_IPHONE_SIMULATOR
     imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -259,7 +299,6 @@
     imagePickerController.delegate = (id)self;
     
     [self presentViewController:imagePickerController animated:YES completion:nil];
-
 }
 
 
@@ -299,12 +338,11 @@
 
 #pragma mark - private methods
 
--(void)setFileSystem
+
+-(void)addObserverToFile
 {
-    if(!self.fileSystem){
-        DBAccount *account = [[DBAccountManager sharedManager].linkedAccounts objectAtIndex:0];
-        self.fileSystem = [[DBFilesystem alloc] initWithAccount:account];
-    }
+    __weak TDViewController *weakSelf = self;
+    [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
 }
 
 -(void)showErrorAlert:(NSString*)title text:(NSString*)msg
@@ -388,32 +426,6 @@
     NSString *theDate = [format stringFromDate:[NSDate date]];
     NSString *noteFilename = [NSString stringWithFormat:@"%@.txt", theDate];
     return noteFilename;
-}
-
-- (void)openFirstNoteIfThereIsOne
-{
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^() {
-		NSArray *immContents = [self.fileSystem listFolder: [DBPath root] error:nil];
-		NSMutableArray *mContents = [NSMutableArray arrayWithArray:immContents];
-        [mContents sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [[obj2 path] compare:[obj1 path]];
-        }];
-		dispatch_async(dispatch_get_main_queue(), ^() {
-//			if (self.theFileBeingViewed == nil && mContents.count > 0) {
-            if ( mContents.count > 0 &&
-                [ [self createFileNameFromDate:[NSDate date]] isEqualToString: [[(DBFileInfo*)mContents[0] path ]name] ] ) {
-                
-                DBFileInfo *firstNote = mContents[0];
-                DBFile *file = [self.fileSystem openFile:firstNote.path error:nil];
-                if (file) {
-                    self.theFileBeingViewed = file;
-                    [self addObserverToFile];
-                    [self reload];
-                }
-            }
-            [self.activityIndicator stopAnimating];
-		});
-	});
 }
 
 
