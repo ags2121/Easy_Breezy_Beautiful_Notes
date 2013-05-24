@@ -14,10 +14,8 @@
 @property (nonatomic, retain) DBFilesystem *filesystem;
 @property (nonatomic, retain) DBPath *root;
 @property (nonatomic, retain) NSMutableArray *contents;
-@property (nonatomic, assign) BOOL creatingFolder;
 @property (nonatomic, retain) DBPath *fromPath;
 @property (nonatomic, assign) BOOL loadingFiles;
-@property (nonatomic, assign, getter=isMoving) BOOL moving;
 
 @end
 
