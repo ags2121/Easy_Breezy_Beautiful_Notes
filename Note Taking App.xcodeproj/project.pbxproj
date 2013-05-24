@@ -11,6 +11,9 @@
 		A93F357A174D84F800F299A2 /* TDNoteListControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93F3579174D84F800F299A2 /* TDNoteListControllerViewController.m */; };
 		A93F357C174D9C4800F299A2 /* TDLinkToDropboxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93F357B174D9C4800F299A2 /* TDLinkToDropboxView.xib */; };
 		A9579E4A174C7E7D0045FB5D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */; };
+		A9CABB30174F0BA500A44E20 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB2E174F08F800A44E20 /* UIImage+Resize.m */; };
+		A9CABB33174F0BB600A44E20 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB32174F0BB600A44E20 /* UIImage+RoundedCorner.m */; };
+		A9CABB36174F0BC500A44E20 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CABB35174F0BC500A44E20 /* UIImage+Alpha.m */; };
 		A9D2167B174C6E8B000984FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167A174C6E8B000984FD /* UIKit.framework */; };
 		A9D2167D174C6E8B000984FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167C174C6E8B000984FD /* Foundation.framework */; };
 		A9D2167F174C6E8B000984FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D2167E174C6E8B000984FD /* CoreGraphics.framework */; };
@@ -36,6 +39,12 @@
 		A93F3579174D84F800F299A2 /* TDNoteListControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDNoteListControllerViewController.m; sourceTree = "<group>"; };
 		A93F357B174D9C4800F299A2 /* TDLinkToDropboxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TDLinkToDropboxView.xib; sourceTree = "<group>"; };
 		A9579E49174C7E7D0045FB5D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		A9CABB2D174F08F800A44E20 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		A9CABB2E174F08F800A44E20 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		A9CABB31174F0BB600A44E20 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		A9CABB32174F0BB600A44E20 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
+		A9CABB34174F0BC500A44E20 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		A9CABB35174F0BC500A44E20 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		A9D21677174C6E8B000984FD /* Note Taking App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Note Taking App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D2167A174C6E8B000984FD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A9D2167C174C6E8B000984FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -136,6 +145,12 @@
 		A9D21681174C6E8B000984FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A9CABB34174F0BC500A44E20 /* UIImage+Alpha.h */,
+				A9CABB35174F0BC500A44E20 /* UIImage+Alpha.m */,
+				A9CABB31174F0BB600A44E20 /* UIImage+RoundedCorner.h */,
+				A9CABB32174F0BB600A44E20 /* UIImage+RoundedCorner.m */,
+				A9CABB2D174F08F800A44E20 /* UIImage+Resize.h */,
+				A9CABB2E174F08F800A44E20 /* UIImage+Resize.m */,
 				A9D21689174C6E8B000984FD /* TDAppDelegate.h */,
 				A9D2168A174C6E8B000984FD /* TDAppDelegate.m */,
 				A9D21682174C6E8B000984FD /* Note Taking App-Info.plist */,
@@ -248,8 +263,11 @@
 				A9D21687174C6E8B000984FD /* main.m in Sources */,
 				A9D2168B174C6E8B000984FD /* TDAppDelegate.m in Sources */,
 				A9D21697174C6E8B000984FD /* TDViewController.m in Sources */,
+				A9CABB30174F0BA500A44E20 /* UIImage+Resize.m in Sources */,
 				A93F3577174D688B00F299A2 /* TDLinkToDropboxView.m in Sources */,
 				A93F357A174D84F800F299A2 /* TDNoteListControllerViewController.m in Sources */,
+				A9CABB33174F0BB600A44E20 /* UIImage+RoundedCorner.m in Sources */,
+				A9CABB36174F0BC500A44E20 /* UIImage+Alpha.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

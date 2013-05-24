@@ -99,16 +99,6 @@
     [self.delegate noteListResigned:self withFile:nil createdNewFile:NO];
 }
 
-//- (DBFile*)createAt
-//{
-//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-//    [format setDateFormat:@"dd-MM-yyyy"];
-//    NSString *theDate = [format stringFromDate:[NSDate date]];
-//    NSString *noteFilename = [NSString stringWithFormat:@"%@.txt", theDate];
-//    DBPath *path = [[DBPath root] childPath:noteFilename];
-//    return [self.filesystem createFile:path error:nil];
-//}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -120,7 +110,6 @@
 {
     return [self.contents count];
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -142,6 +131,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([_filesystem deletePath:info.path error:nil]) {
 		[_contents removeObjectAtIndex:[indexPath row]];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.delegate didDeleteFileAtPath:info];
 	} else {
 		[self showErrorAlert:@"Error" text: @"There was an error deleting that file."];
 	}
@@ -154,7 +144,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DBFileInfo *info = [_contents objectAtIndex:[indexPath row]];
-    
     
     DBError *error = [[DBError alloc] init];
     DBFile *file = [_filesystem openFile:info.path error:&error];
@@ -172,21 +161,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     else{
         [self.delegate noteListResigned:self withFile:file createdNewFile:NO];
     }
-    
-    
 }
-
--(void)isLoadingCells
-{
-    
-}
-
 
 - (void)reload
 {
     [self.tableView reloadData];
 }
-
 
 - (void)loadFiles
 {
@@ -226,4 +206,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *theDate = [format stringFromDate:[NSDate date]];
     return [NSString stringWithFormat:@"%@.txt", theDate];
 }
+
+
+
 @end

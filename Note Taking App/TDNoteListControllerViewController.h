@@ -17,6 +17,8 @@
                withFile:(DBFile*)file
         createdNewFile:(BOOL)createdNewFile;
 
+-(void)didDeleteFileAtPath:(DBFileInfo*)fileinfo;
+
 @end
 
 @interface TDNoteListControllerViewController : UITableViewController

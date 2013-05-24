@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Alex Silva. All rights reserved.
 //
 
+#import "UIImage+Resize.h"
 #import "TDViewController.h"
 #import "TDNoteListControllerViewController.h"
 #import "TDLinkToDropboxView.h"
@@ -47,12 +48,6 @@
         self.theFileBeingViewed = nil;
         self.textViewLoaded = NO;
     }
-
-
-//    if ([self.theFileBeingViewed observationInfo] == nil){
-//        __weak TDViewController *weakSelf = self;
-//        [self.theFileBeingViewed addObserver:self block:^() { [weakSelf reload]; }];
-//    }
     
     if (!self.textViewLoaded) {
         [self reload];
@@ -62,9 +57,10 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
-    if ( self.theFileBeingViewed != nil )
+    if ( self.theFileBeingViewed != nil ){
         [self.theFileBeingViewed removeObserver:self];
-	[self saveChanges];
+        [self saveChanges];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,6 +111,7 @@
     }
 }
 
+
 #pragma mark - UIAlertViewDelegate methods
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -156,7 +153,14 @@
     DBPath *path = [[DBPath root] childPath:noteFilename];
     self.theFileBeingViewed = [self.fileSystem createFile:path error:nil];
     
-    [self.theFileBeingViewed writeString:self.notesTextview.text error:nil];
+    if( self.photoImageView.image ){
+        UIImage *composite = [self imageByCombiningImageViewWithTextView];
+        NSData *imageData = UIImagePNGRepresentation(composite);
+        [self.theFileBeingViewed writeData:imageData error:nil];
+    }
+    else{
+        [self.theFileBeingViewed writeString:self.notesTextview.text error:nil];
+    }
     
     if (!self.theFileBeingViewed) {
         [self showErrorAlert:@"An error has occurred" text: @"Unable to create note"];
@@ -179,10 +183,13 @@
     }
     else if(createdNewFile){
         self.theFileBeingViewed = nil;
+        self.photoImageView.image = nil;
         [self createAt];
         [self addObserverToFile];
         self.navigationItem.title = self.theFileBeingViewed.info.path.name;
         self.notesTextview.text = @"";
+        [self.notesTextview setEditable:YES];
+        self.notesTextview.userInteractionEnabled = YES;
     }
     
     else if (self.theFileBeingViewed != nil) {
@@ -190,6 +197,17 @@
     }
     
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void)didDeleteFileAtPath:(DBFileInfo*)fileinfo
+{
+    if ( [fileinfo.path.name isEqualToString:self.theFileBeingViewed.info.path.name] ){
+        
+        self.theFileBeingViewed = nil;
+        self.photoImageView.image = nil;
+        [self.notesTextview setEditable:YES];
+        self.notesTextview.userInteractionEnabled = YES;
+    }
 }
 
 -(void)setInputAccessoryView
@@ -226,8 +244,55 @@
 
 -(void)takePhoto
 {
+
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+#if TARGET_IPHONE_SIMULATOR
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+#else
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+#endif
+    imagePickerController.editing = YES;
+    imagePickerController.delegate = (id)self;
     
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+
 }
+
+
+#pragma mark - UITextViewDelegate methods
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    NSLog(@"textview did change");
+	[_writeTimer invalidate];
+	self.writeTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(saveChanges)
+                                                     userInfo:nil repeats:NO];
+}
+
+#pragma mark - UIImagePickerController delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+	UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    // Resize the image from the camera
+	UIImage *scaledImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(self.photoImageView.frame.size.width, self.photoImageView.frame.size.height) interpolationQuality:kCGInterpolationHigh];
+    // Crop the image to a square (yikes, fancy!)
+    UIImage *croppedImage = [scaledImage croppedImage:CGRectMake((scaledImage.size.width - self.photoImageView.frame.size.width)/2, (scaledImage.size.height - self.photoImageView.frame.size.height)/2, self.photoImageView.frame.size.width, self.photoImageView.frame.size.height)];
+    // Show the photo on the screen
+    self.photoImageView.image = croppedImage;
+    
+    [self addObserverToFile];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self addObserverToFile];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - private methods
 
 -(void)setFileSystem
 {
@@ -243,29 +308,28 @@
     [av show];
 }
 
-#pragma mark - UITextViewDelegate methods
-
-- (void)textViewDidChange:(UITextView *)textView
-{
-    NSLog(@"textview did change");
-	[_writeTimer invalidate];
-	self.writeTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(saveChanges)
-                                                     userInfo:nil repeats:NO];
-}
-
-
-#pragma mark - private methods
-
 - (void)reload {
 	BOOL updateEnabled = NO;
 	if (self.theFileBeingViewed.status.cached) {
 		if (!_textViewLoaded) {
 			_textViewLoaded = YES;
-			NSString *contents = [self.theFileBeingViewed readString:nil];
             
+            NSData *data = [self.theFileBeingViewed readData:nil];
+            
+            //if data is a String
+            if ( [TDViewController contentTypeForImageData:data] == nil) {
+                NSString *contents = [self.theFileBeingViewed readString:nil];
+                self.notesTextview.text = contents;
+                NSLog(@"textview text: %@", self.notesTextview.text);
+            }
+            else{
+                self.photoImageView.image = [UIImage imageWithData:data];
+                self.notesTextview.text = @"";
+                [self.notesTextview setEditable:NO];
+                self.notesTextview.userInteractionEnabled = NO;
+            }
             self.navigationItem.title = self.theFileBeingViewed.info.path.name;
-			self.notesTextview.text = contents;
-            NSLog(@"textview text: %@", self.notesTextview.text);
+
 		}
 		
 		[self.activityIndicator stopAnimating];
@@ -275,7 +339,9 @@
 			updateEnabled = YES;
 		}
 	} else if(self.theFileBeingViewed == nil){
-        self.notesTextview.text = @"";
+        
+        if(!self.photoImageView.image)
+            self.notesTextview.text = @"";
         self.navigationItem.title = @"Note";
 		//[self.activityIndicator startAnimating];
 		//self.notesTextview.hidden = YES;
@@ -285,16 +351,28 @@
 }
 
 - (void)saveChanges {
-	if (!_writeTimer) return;
-	[_writeTimer invalidate];
-	self.writeTimer = nil;
-	
-	[self.theFileBeingViewed writeString:self.notesTextview.text error:nil];
+//	if (!_writeTimer) return;
+//	[_writeTimer invalidate];
+//	self.writeTimer = nil;
+    
+	if( self.photoImageView.image ){
+        UIImage *composite = [self imageByCombiningImageViewWithTextView];
+        NSData *imageData = UIImagePNGRepresentation(composite);
+        [self.theFileBeingViewed writeData:imageData error:nil];
+        [self.notesTextview setEditable:NO];
+        self.notesTextview.userInteractionEnabled = NO;
+
+    }
+    else{
+        [self.theFileBeingViewed writeString:self.notesTextview.text error:nil];
+    }
+    
+    if(self.theFileBeingViewed)
+        [self reload];
 }
 
 - (void)openFirstNoteIfThereIsOne
 {
-    
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^() {
 		NSArray *immContents = [self.fileSystem listFolder: [DBPath root] error:nil];
 		NSMutableArray *mContents = [NSMutableArray arrayWithArray:immContents];
@@ -314,6 +392,45 @@
             [self.activityIndicator stopAnimating];
 		});
 	});
+}
+
+- (UIImage*)imageByCombiningImageViewWithTextView
+{
+    
+    UIGraphicsBeginImageContextWithOptions(self.photoImageView.image.size, NO, 0.0); //retina res
+    [self.photoImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:self.notesTextview.text];    NSInteger _stringLength = self.notesTextview.text.length;
+    [str addAttribute:NSBackgroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, _stringLength)];
+    [str addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18.0] range:NSMakeRange(0, _stringLength)];
+    
+    self.notesTextview.attributedText = str;
+    [self.notesTextview setNeedsDisplay];
+    
+    [self.notesTextview.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
++ (NSString *)contentTypeForImageData:(NSData *)data {
+    uint8_t c;
+    [data getBytes:&c length:1];
+    
+    switch (c) {
+        case 0xFF:
+            return @"image/jpeg";
+        case 0x89:
+            return @"image/png";
+        case 0x47:
+            return @"image/gif";
+        case 0x49:
+        case 0x4D:
+            return @"image/tiff";
+    }
+    return nil;
 }
 
 @end

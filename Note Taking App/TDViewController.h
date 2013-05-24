@@ -10,11 +10,12 @@
 #import "TDLinkToDropboxView.h"
 #import "TDNoteListControllerViewController.h"
 
-@interface TDViewController : UIViewController<LinkToDropBoxViewDelegate, NoteListDelegate, UITextViewDelegate>
+@interface TDViewController : UIViewController<LinkToDropBoxViewDelegate, NoteListDelegate, UITextViewDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextView *notesTextview;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *updateButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 
 - (IBAction)updateButtonPressed:(id)sender;
 - (IBAction)listOfNotesBtnPressed:(id)sender;
