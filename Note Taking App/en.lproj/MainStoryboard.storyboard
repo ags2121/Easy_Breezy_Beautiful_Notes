@@ -58,12 +58,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Note" id="6uN-mi-NuC">
-                        <barButtonItem key="leftBarButtonItem" systemItem="fastForward" id="Yzz-lq-afk">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="01-refresh.png" style="plain" id="Yzz-lq-afk">
                             <connections>
                                 <action selector="updateButtonPressed:" destination="2" id="Cig-Rj-iMk"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="List of Notes" id="085-v9-D5s">
+                        <barButtonItem key="rightBarButtonItem" title="Notes" id="085-v9-D5s">
                             <connections>
                                 <action selector="listOfNotesBtnPressed:" destination="2" id="rBp-r7-Pkj"/>
                             </connections>
@@ -72,6 +72,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="r0C-c1-MkW" id="nkJ-gm-Czc"/>
+                        <outlet property="listOfNotesBtn" destination="085-v9-D5s" id="vAc-gx-fD5"/>
                         <outlet property="notesTextview" destination="IkR-14-pST" id="Hgz-Em-JTR"/>
                         <outlet property="photoImageView" destination="dXH-cV-cCV" id="gfS-Gp-za0"/>
                         <outlet property="updateButton" destination="Yzz-lq-afk" id="z73-nJ-4CJ"/>
@@ -127,18 +128,23 @@
                                 <action selector="cancelBtnPressed:" destination="pj5-nG-nHe" id="zq8-bE-zr9"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="RYi-O4-F6Q">
+                        <barButtonItem key="rightBarButtonItem" image="10-medical.png" style="plain" id="RYi-O4-F6Q">
                             <connections>
                                 <action selector="addNoteButtonPressed:" destination="pj5-nG-nHe" id="b7r-hu-qbD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OT-W7-Tll" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="968" y="12"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="01-refresh.png" width="24" height="26"/>
+        <image name="10-medical.png" width="22" height="22"/>
+    </resources>
     <classes>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
@@ -156,6 +162,7 @@
                 <relationship kind="action" name="listOfNotesBtnPressed:"/>
                 <relationship kind="action" name="updateButtonPressed:"/>
                 <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="listOfNotesBtn" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="notesTextview" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="photoImageView" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="updateButton" candidateClass="UIBarButtonItem"/>

@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *updateButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *listOfNotesBtn;
 
 - (IBAction)updateButtonPressed:(id)sender;
 - (IBAction)listOfNotesBtnPressed:(id)sender;

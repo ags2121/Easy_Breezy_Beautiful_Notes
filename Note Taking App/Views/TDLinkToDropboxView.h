@@ -20,5 +20,6 @@
 
 @property (nonatomic, weak) id <LinkToDropBoxViewDelegate> delegate;
 - (IBAction)accountBtnPressed:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *linkToDropboxBtn;
 
 @end

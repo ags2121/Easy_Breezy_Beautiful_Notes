@@ -22,6 +22,7 @@
     [DBAccountManager setSharedManager:accountMgr];
     
     self.eventStore = [[EKEventStore alloc] init];
+    [self setAppearanceProxies];
     
     return YES;
 }
@@ -62,6 +63,21 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(void)setAppearanceProxies
+{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navBar"] forBarMetrics:UIBarMetricsDefault];
+    
+    [[UIToolbar appearance] setBackgroundImage:[UIImage imageNamed:@"navBar"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    
+    NSDictionary* textAttributes = @{ UITextAttributeTextColor : [UIColor blackColor], UITextAttributeTextShadowColor : [UIColor grayColor] };
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes: textAttributes
+                                                forState: UIControlStateNormal];
+    
 }
 
 @end

@@ -36,6 +36,7 @@
 	DBAccount *account = [[DBAccountManager sharedManager].linkedAccounts objectAtIndex:0];
 	if (!account) {
         [self showOptionToLinkAccount];
+        self.listOfNotesBtn.enabled = NO;
 	}
 
     [self setInputAccessoryView];
@@ -190,12 +191,17 @@
     //remove showOptionToLink view
     [self.linkToDropboxView removeFromSuperview];
     self.linkToDropboxView = nil;
+    
+    //enable notes list
+    self.listOfNotesBtn.enabled = YES;
 }
 
 -(void)showOptionToLinkAccount
 {
     self.linkToDropboxView = [[[NSBundle mainBundle] loadNibNamed:@"TDLinkToDropboxView" owner:self options:nil] objectAtIndex:0];
     self.linkToDropboxView.delegate = self;
+    self.linkToDropboxView.linkToDropboxBtn.layer.cornerRadius = 5.0;
+    self.linkToDropboxView.linkToDropboxBtn.layer.masksToBounds = YES;
     self.linkToDropboxView.frame = self.view.frame;
     self.linkToDropboxView.center = self.view.center;
     [self.view addSubview:self.linkToDropboxView];
